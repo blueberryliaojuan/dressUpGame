@@ -1,0 +1,256 @@
+:root {
+  --stroke: #2b2b2b;
+  --bg: #fff8e9;
+  --grey: #f4f4f4;
+  --greyStroke: #d2d2d2;
+  --blue: #29c3fb;
+  --green: #5dd1ab;
+  --red: #e62626;
+  --duration: 550ms;
+  --easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.show {
+  display: block;
+}
+.hide {
+  display: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: radial-gradient(var(--grey), transparent 20%),
+    radial-gradient(rgba(0, 0, 0, 0.1) 20%, transparent 20%);
+  background-color: var(--bg);
+  background-position: 0 0, 20px 20px;
+  background-size: 40px 40px;
+  position: relative;
+}
+
+.logo {
+  position: absolute;
+  left: 100px;
+  top: 50px;
+  width: 100px;
+  height: auto;
+}
+
+.save {
+  position: absolute;
+  right: 100px;
+  top: 50px;
+}
+
+.save-btn {
+  background-color: var(--green);
+  color: white;
+}
+
+.game-container {
+  width: 506px;
+  height: 900px;
+  border: 8px solid var(--greyStroke);
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.character {
+  object-fit: contain; /* Preserve aspect ratio */
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.game-window {
+  width: 400px;
+  height: 400px;
+  background-color: #fff8f8;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative; /* Ensure z-index is effective */
+}
+
+.attachment {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s var(--easing);
+}
+.attachment img {
+  width: 100%;
+}
+
+.attachment.clothes {
+  z-index: 1;
+}
+
+.attachment.hair {
+  z-index: 2;
+}
+
+.attachment.accessories {
+  z-index: 3;
+}
+
+.dress-up-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  gap: 10px;
+  width: 100%;
+}
+
+.dress-up-section .dress-up-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dress-up-section .dress-up-item .dress-up-name {
+  font-size: 18px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.dress-up-section .dress-up-item .dress-up-showcase {
+  width: 140px;
+  height: 140px;
+  border: var(--greyStroke) 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.dress-up-section .dress-up-item .dress-up-showcase img {
+  width: 90%;
+  height: 90%;
+  max-width: 100%; /* Max width constraint */
+  max-height: 100%; /* Max height constraint */
+  object-fit: contain; /* Fit within container while maintaining aspect ratio */
+}
+
+.dress-up-section .dress-up-item.active {
+  border: 2px solid var(--blue);
+  border-radius: 8px;
+}
+
+.controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.button {
+  padding: 20px 30px;
+  font-size: 28px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Luckiest Guy", cursive;
+  transition: background-color 0.3s var(--easing); /* Smooth hover effect */
+  color: white;
+}
+
+.start {
+  background-color: var(--blue);
+  margin-right: 40px;
+}
+
+.stop {
+  background-color: var(--red);
+}
+
+.clothes-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover animation */
+}
+
+.clothes-item:hover {
+  transform: scale(1.1); /* Slight zoom effect */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.clothes-item.selected {
+  border: 2px solid var(--blue);
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(41, 195, 251, 0.5); /* Subtle blue glow */
+  transform: scale(1.2); /* Larger zoom effect */
+}
+
+/* Popup styles */
+/* 遮罩的样式 */
+.overlay {
+  display: none; /* 默认隐藏 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 灰色，50%透明度 */
+  z-index: 999; /* 确保在弹窗后面，页面内容前面 */
+}
+
+/* 调整 popup 样式的层级 */
+.popup {
+  display: none; /* 默认隐藏 */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--bg);
+  border-radius: 8px;
+  z-index: 1000; /* 确保在遮罩前面 */
+}
+
+#popupImage {
+  width: 400px;
+  height: auto;
+  background-color: var(--bg);
+}
+
+.popup-content {
+  background-color: var(--bg);
+  padding: 100px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.popup-content p {
+  font-size: 32px;
+  font-weight: 800;
+  padding: 20px;
+  margin-bottom: 20px;
+  color: var(--stroke);
+}
+
+#backgroundMusic {
+  position: absolute;
+  bottom: 10px;
+}

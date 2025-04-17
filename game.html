@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dress Up</title>
+    <link
+      href="https://fonts.font.im/css?family=Luckiest+Guy"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="game.css" />
+  </head>
+  <body>
+    <div>
+      <img src="./png/logo.svg" alt="logo" class="logo" />
+    </div>
+    <div class="game-container">
+      <div class="game-window" id="gameContainer">
+        <!-- Character -->
+        <img src="png/character.png" alt="Game" class="character" />
+        <!-- Clothes -->
+        <div class="attachment clothes">
+          <div></div>
+        </div>
+        <div class="attachment hair">
+          <div></div>
+        </div>
+        <div class="attachment accessories">
+          <div></div>
+        </div>
+      </div>
+      <!-- Dress Up Selections -->
+      <div class="dress-up-section">
+        <div class="dress-up-item">
+          <div class="dress-up-name">Clothes</div>
+          <div class="dress-up-showcase">
+            <!-- <img src="" alt="Clothes 2" class="clothes-item" /> -->
+          </div>
+        </div>
+        <div class="dress-up-item">
+          <div class="dress-up-name">Hair</div>
+          <div class="dress-up-showcase">
+            <!-- <img src="" alt="Clothes 1" class="clothes-item" /> -->
+          </div>
+        </div>
+        <div class="dress-up-item">
+          <div class="dress-up-name">Accessories</div>
+          <div class="dress-up-showcase">
+            <!-- <img src="" alt="Clothes 3" class="clothes-item" /> -->
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="button start">Start</button>
+        <button class="button stop">Stop</button>
+      </div>
+      <!-- popup -->
+      <div id="popup-wrapper">
+        <div id="popup-overlay" class="overlay"></div>
+        <div id="popup" class="popup">
+          <div class="popup-content">
+            <p>Great! You've got</p>
+            <img src="" alt="" id="popupImage" />
+            <p id="popup-message"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="save">
+      <button class="button save-btn" id="downloadBtn">Download</button>
+    </div>
+    <!-- Music file -->
+    <audio id="backgroundMusic" loop controls>
+      <source src="./audio/music.wav" type="audio/wav" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <script>
+      const items = {
+        clothes: [
+          {
+            img: "./png/jayme_tshirt.png",
+            alt: "Jayme's T-shirt",
+            thumb: "./png/jayme_tshirt_thumb.png",
+          },
+          {
+            img: "./png/kiko_sweatshirt.png",
+            alt: "Czara's sweatshirt",
+            thumb: "./png/kiko_sweatshirt_thumb.png",
+          },
+          {
+            img: "./png/negin_pink_shirt.png",
+            alt: "Negin's pink shirt",
+            thumb: "./png/negin_pink_shirt_thumb.png",
+          },
+          {
+            img: "./png/ju_jacket.png",
+            alt: "Ju's jacket",
+            thumb: "./png/ju_jacket_thumb.png",
+          },
+        ],
+        hair: [
+          {
+            img: "./png/christine_hair.png",
+            alt: "Christine's hair",
+            thumb: "./png/christine_hair_thumb.png",
+          },
+          {
+            img: "./png/kiko_hair.png",
+            alt: "Kiko's hair",
+            thumb: "./png/kiko_hair_thumb.png",
+          },
+          {
+            img: "./png/mikhaila_hair.png",
+            alt: "Mikhaila's hair",
+            thumb: "./png/mikhaila_hair_thumb.png",
+          },
+          {
+            img: "./png/airrick_hair.png",
+            alt: "Airrick's hair",
+            thumb: "./png/airrick_hair_thumb.png",
+          },
+        ],
+
+        accessories: [
+          {
+            img: "./png/airrick_ears.png",
+            alt: "Airrick's earrings",
+            thumb: "./png/airrick_ears.png",
+          },
+          {
+            img: "./png/branden_mask.png",
+            alt: "Branden's mask",
+            thumb: "./png/branden_mask_thumb.png",
+          },
+          {
+            img: "./png/christine_sunglass.png",
+            alt: "Christine's sunglasses",
+            thumb: "./png/christine_sunglass_thumb.png",
+          },
+          {
+            img: "./png/negin_cap.png",
+            alt: "Ellie's cap",
+            thumb: "./png/negin_cap_thumb.png",
+          },
+        ],
+      };
+
+      const dressUpSections = document.querySelectorAll(".dress-up-showcase");
+      const attachmentAreas = document.querySelectorAll(".attachment");
+
+      let currentCategoryIndex = 0;
+      let currentThumbIndex = 0;
+      let thumbInterval = null;
+
+      // Initialize thumbnails
+      Object.keys(items).forEach((category, index) => {
+        const showcase = dressUpSections[index];
+        const item = items[category][0];
+        showcase.innerHTML = `<img src="${item.thumb}" alt="${item.alt}" class="clothes-item" />`;
+      });
+
+      // Start the carousel for the current category's thumbnails and character items
+      function startThumbnailCarousel() {
+        const category = Object.keys(items)[currentCategoryIndex];
+        const showcase = dressUpSections[currentCategoryIndex];
+        const attachmentArea = attachmentAreas[currentCategoryIndex];
+        const categoryItems = items[category];
+
+        thumbInterval = setInterval(() => {
+          currentThumbIndex = (currentThumbIndex + 1) % categoryItems.length;
+          const nextItem = categoryItems[currentThumbIndex];
+
+          // Update thumbnails
+          showcase.innerHTML = `<img src="${nextItem.thumb}" alt="${nextItem.alt}" class="clothes-item" />`;
+
+          // Synchronize and update character items
+          attachmentArea.innerHTML = `<img src="${nextItem.img}" alt="${nextItem.alt}" />`;
+        }, 500); // Carousel interval
+      }
+
+      let popupVisible = false; // Tracks if the popup is visible
+      let isStarted = false; // Marks if the game has started
+
+      // Stop the thumbnail carousel and lock in the current item
+      function stopThumbnailCarousel() {
+        if (!isStarted || popupVisible) return; // Do nothing if the game hasn't started or the popup is visible
+
+        clearInterval(thumbInterval);
+        thumbInterval = null;
+
+        // Get the current category and selected item
+        const categories = Object.keys(items);
+        const currentCategory = categories[currentCategoryIndex];
+        const selectedItem = items[currentCategory][currentThumbIndex];
+
+        // Update the popup message
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("popup-overlay");
+        const messageElement = document.getElementById("popup-message");
+        const popupImage = document.getElementById("popupImage");
+
+        // Update the popup message
+        messageElement.textContent = ` ${selectedItem.alt}!`;
+
+        // Update the popup image source and alt text
+        popupImage.src = selectedItem.thumb;
+        popupImage.alt = selectedItem.alt;
+
+        // Show the popup
+        popup.style.display = "block";
+        overlay.style.display = "block";
+
+        // Automatically hide the popup after a few seconds
+        setTimeout(() => {
+          popup.style.display = "none";
+          overlay.style.display = "none";
+          popupVisible = false; // Mark the popup as no longer visible
+        }, 3000);
+
+        // Switch to the next category
+        currentCategoryIndex =
+          (currentCategoryIndex + 1) % Object.keys(items).length;
+        currentThumbIndex = 0; // Reset thumbnail index
+
+        //change "Start" to "Next"
+        document.querySelector(".start").innerHTML = "Next";
+      }
+
+      // Start button click event
+      document.querySelector(".start").addEventListener("click", () => {
+        isStarted = true; // Game starts, allow the popup to display
+        if (!thumbInterval) {
+          startThumbnailCarousel();
+        }
+      });
+
+      // Stop button click event
+      document
+        .querySelector(".stop")
+        .addEventListener("click", stopThumbnailCarousel);
+
+      // Reset the state when the page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        attachmentAreas.forEach((area) => (area.innerHTML = ""));
+        currentCategoryIndex = 0;
+        currentThumbIndex = 0;
+      });
+
+      // Download button event
+      document
+        .getElementById("downloadBtn")
+        .addEventListener("click", function () {
+          // Use html2canvas to capture the specified element as an image
+          html2canvas(document.getElementById("gameContainer"), {
+            onrendered: function (canvas) {
+              // Use the callback method instead of .then()
+              const link = document.createElement("a");
+              link.href = canvas.toDataURL("image/png"); // Convert the canvas to image data
+              link.download = "dressup-result.png"; // Set the filename for download
+              link.click(); // Trigger the download
+            },
+          });
+        });
+    </script>
+  </body>
+</html>
