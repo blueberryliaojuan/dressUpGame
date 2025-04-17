@@ -211,8 +211,6 @@
         const overlay = document.getElementById("popup-overlay");
         const messageElement = document.getElementById("popup-message");
         const popupImage = document.getElementById("popupImage");
-
-        // Update the popup message
         messageElement.textContent = ` ${selectedItem.alt}!`;
 
         // Update the popup image source and alt text
@@ -235,7 +233,7 @@
           (currentCategoryIndex + 1) % Object.keys(items).length;
         currentThumbIndex = 0; // Reset thumbnail index
 
-        //change "Start" to "Next"
+        //change "Start" to "Next" after it's started
         document.querySelector(".start").innerHTML = "Next";
       }
 
