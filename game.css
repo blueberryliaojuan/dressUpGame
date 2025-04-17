@@ -58,10 +58,10 @@ body {
 .game-container {
   width: 506px;
   height: 900px;
-  border: 8px solid var(--greyStroke);
-  border-radius: 15px;
+  border: 2px solid var(--stroke);
+  border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(28, 26, 26, 1) 17px 17px 0 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,6 +80,8 @@ body {
   width: 400px;
   height: 400px;
   background-color: #fff8f8;
+  border: 2px solid var(--stroke);
+  border-radius: 20px;
   margin-bottom: 100px;
   display: flex;
   justify-content: center;
@@ -132,6 +134,8 @@ body {
 }
 
 .dress-up-section .dress-up-item .dress-up-name {
+  font-family: "Jost", sans-serif;
+  font-weight: 600;
   font-size: 18px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -140,7 +144,8 @@ body {
 .dress-up-section .dress-up-item .dress-up-showcase {
   width: 140px;
   height: 140px;
-  border: var(--greyStroke) 1px solid;
+  border: var(--greyStroke) 2px solid;
+  border-radius: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -149,11 +154,11 @@ body {
 }
 
 .dress-up-section .dress-up-item .dress-up-showcase img {
-  width: 90%;
+  width: 70%;
   height: 90%;
-  max-width: 100%; /* Max width constraint */
-  max-height: 100%; /* Max height constraint */
-  object-fit: contain; /* Fit within container while maintaining aspect ratio */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .dress-up-section .dress-up-item.active {
@@ -169,14 +174,18 @@ body {
 }
 
 .button {
-  padding: 20px 30px;
-  font-size: 28px;
-  border: none;
-  border-radius: 5px;
+  padding: 15px 70px;
+  font-size: 24px;
+  border: 2px solid var(--stroke);
+  border-radius: 12px;
   cursor: pointer;
-  font-family: "Luckiest Guy", cursive;
+  font-family: "jost", cursive;
   transition: background-color 0.3s var(--easing); /* Smooth hover effect */
   color: white;
+}
+
+.button:hover {
+  transform: scale(1.05);
 }
 
 .start {
@@ -184,12 +193,20 @@ body {
   margin-right: 40px;
 }
 
+.start:hover {
+  background-color: #000;
+}
+
 .stop {
   background-color: var(--red);
 }
 
+.stop:hover {
+  background-color: #000;
+}
+
 .clothes-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Hover animation */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .clothes-item:hover {
@@ -200,43 +217,41 @@ body {
 .clothes-item.selected {
   border: 2px solid var(--blue);
   border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(41, 195, 251, 0.5); /* Subtle blue glow */
-  transform: scale(1.2); /* Larger zoom effect */
+  box-shadow: 0 4px 10px rgba(41, 195, 251, 0.5);
+  transform: scale(1.2);
 }
 
 /* Popup styles */
-/* 遮罩的样式 */
 .overlay {
-  display: none; /* 默认隐藏 */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* 灰色，50%透明度 */
-  z-index: 999; /* 确保在弹窗后面，页面内容前面 */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
-/* 调整 popup 样式的层级 */
 .popup {
-  display: none; /* 默认隐藏 */
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: var(--bg);
-  border-radius: 8px;
-  z-index: 1000; /* 确保在遮罩前面 */
+  z-index: 1000;
+  border: 5px solid var(--stroke);
+  border-radius: 18px;
 }
 
 #popupImage {
   width: 400px;
   height: auto;
-  background-color: var(--bg);
+  background: #ffffff;
 }
 
 .popup-content {
-  background-color: var(--bg);
+  background: #ffffff;
   padding: 100px;
   border-radius: 8px;
   text-align: center;
